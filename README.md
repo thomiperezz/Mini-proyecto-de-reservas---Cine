@@ -1,74 +1,99 @@
-# 🎬 Sistema de Reservas de Cine
+# 🎬 Sistema de Reservas de Cine en Java
 
-Sistema de gestión de butacas para una sala de cine, desarrollado en **Java** como parte de mi aprendizaje en programación orientada a objetos y manejo de arreglos bidimensionales.  
-El programa permite visualizar el mapa de butacas, realizar reservas y manejar errores básicos.
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Java](https://img.shields.io/badge/Java-8%2B-blue)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 
----
-
-## 📋 Características
-
-- ✅ Mapa interactivo de **5 filas × 8 columnas**.
-- ✅ Reserva de butacas con validación de disponibilidad.
-- ✅ Validación de entradas (rangos de filas y columnas).
-- ✅ Menú cíclico hasta que el usuario decida salir.
-- ✅ Código modularizado en métodos para mayor claridad.
-- ✅ Constantes para evitar números mágicos.
+Este proyecto es una aplicación de consola en **Java** que simula la gestión de butacas en una sala de cine.  
+Permite reservar asientos, mostrar el mapa actualizado y calcular el porcentaje de ocupación.
 
 ---
 
-## 🚀 Cómo ejecutarlo
+## 🚀 Características principales
+- Representación de la sala mediante una **matriz de caracteres**:
+  - `L` → Libre
+  - `X` → Ocupada
+- Muestra un **mapa visual** con filas y columnas numeradas.
+- Menú interactivo:
+  - Reservar una o varias butacas.
+  - Salir del programa.
+- Validación de entradas:
+  - Evita reservas fuera de rango.
+  - No permite reservar butacas ya ocupadas.
+- Cálculo del **porcentaje de ocupación** de la sala.
+- Finaliza automáticamente cuando la sala está llena.
 
-### Requisitos
-- Java 11 o superior.
-- Un IDE (IntelliJ IDEA, Eclipse, VS Code) o terminal con `javac` y `java`.
+---
 
-### Pasos
-1. Cloná el repositorio:
-   ```bash
-   git clone https://github.com/thomiperezz/Mini-proyecto-de-reservas---Cine.git
-Abrí la carpeta en tu IDE o terminal.
+## 📂 Estructura del proyecto
+- `Cine.java` → Contiene toda la lógica del programa:
+  - Inicialización de la sala.
+  - Métodos para mostrar el mapa, reservar butacas y calcular ocupación.
+  - Bucle principal con menú interactivo.
 
-Compilá el programa:
+---
+
+## 🖥️ Ejemplo de uso
+Al iniciar el programa:
+
+```text
+-----------Bienvenido al sistema de gestión de Cines-----------
+Ingrese la cantidad de filas que tiene la sala: 5
+Ingrese la cantidad de columnas que tiene la sala: 8
+-----------MAPA DE BUTACAS-----------
+   1 2 3 4 5 6 7 8
+1  L L L L L L L L
+2  L L L L L L L L
+3  L L L L L L L L
+4  L L L L L L L L
+5  L L L L L L L L
+Porcentaje de ocupación de la sala: 0.0%
+
+-----------MENU-----------
+1. Reservar una butaca
+2. Salir
+---------------------------------
+Después de reservar, el mapa se actualiza y se muestra el porcentaje de ocupación.
+```
+
+🛠️ Instalación y ejecución
+Clonar el repositorio:
 
 bash
+```bash
+git clone https://github.com/tuusuario/cine-reservas.git
+Compilar el archivo:
+```
+
+bash
+```bash
 javac Cine.java
-Ejecutalo:
+Ejecutar el programa:
+```
 
 bash
+```bash
 java Cine
-🧩 Estructura del código
-El proyecto está organizado en una sola clase principal Cine, con métodos que separan responsabilidades:
+📈 Posibles mejoras futuras
+Mostrar cantidad de butacas libres y ocupadas.
 
-Método	Descripción
-main	Controla el flujo del programa (menú, bucle).
-inicializarButacas	Llena la matriz con 'L' (libre).
-mostrarMapa	Imprime el mapa con números de fila y columna.
-reservarButaca	Gestiona la entrada de datos y modifica la matriz si es válido.
-🛠️ Tecnologías utilizadas
-Java – Lenguaje base.
+Asignar precios diferentes por fila y calcular el total.
 
-Scanner – Para entrada de datos por consola.
+Permitir cancelar reservas.
 
-Arreglos bidimensionales – Representación de la sala.
+Manejo avanzado de errores (ej. entradas no numéricas).
 
-📌 Próximas mejoras (en progreso)
-Mostrar cantidad de butacas libres y porcentaje de ocupación.
+Persistencia de datos (guardar reservas en archivo o base de datos).
+```
 
-Reservas múltiples en una sola operación.
-
-Precios por fila y cálculo total a pagar.
-
-Persistencia en archivo o base de datos.
-
-👤 Autor
-thomi.bash
-
-GitHub: @thomiperezz
-
-LinkedIn (opcional)
-
-📄 Licencia
-Este proyecto está bajo la licencia MIT. Podés usarlo y modificarlo libremente.
-
-⭐ Si te gustó este proyecto, no olvides dejar una estrella en GitHub.
-¡Gracias por visitar!
+🤝 Contribuciones
+```text
+¡Las contribuciones son bienvenidas!
+Podés hacer un fork del repositorio, crear una rama con tus mejoras
+y abrir un pull request para que se revisen los cambios.
+```
+📜 Licencia
+```text
+Este proyecto se distribuye bajo la licencia MIT.
+Podés usarlo libremente para aprender, modificar y compartir.
+```
