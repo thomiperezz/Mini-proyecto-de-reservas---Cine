@@ -1,6 +1,9 @@
 import java.util.Scanner;
 
 public class Cine {
+
+    static char[][] butacas;
+
     public static void main(String[] args) {
         /*
             Sistema de Reservas de Cine
@@ -40,7 +43,7 @@ public class Cine {
 
             Reserva de butacas
 
-            Solicitar al usuario el número de fila (1 a 5) y número de columna (1 a 8).
+            Solicitar al usuario el número de fila y número de columna.
 
             Validar que los números estén dentro del rango. Si no, mostrar un mensaje de error y volver al menú.
 
@@ -98,8 +101,95 @@ public class Cine {
         Scanner inputColumnas = new Scanner(System.in);
         int columnas = inputColumnas.nextInt();
 
+        // Inicializamos la matriz
+        butacas  = inicializarCine(filas,columnas);
 
-        char[][] butacas = new char[filas][columnas];
+
+        System.out.println("-----------MAPA DE BUTACAS-----------");
+        System.out.println(mostrarMapa());
+
+        System.out.println(" ");
+
+        System.out.println("-----------MENU-----------");
+        System.out.println("1. Reservar una butaca");
+        System.out.println("2. Salir");
+        System.out.println("---------------------------------");
+
+        Scanner inputMenu = new Scanner(System.in);
+        System.out.println("Ingrese la opcion: ");
+        int opcion = inputMenu.nextInt();
+
+        switch (opcion) {
+            case 1:
+                System.out.println("Ingrese la cantidad de reservas de butaca que quiere realizar: ");
+                Scanner inputCantidadReservas = new Scanner(System.in);
+                int cantidad = inputCantidadReservas.nextInt();
+
+                if (cantidad>1) {
+                    System.out.println("Ingrese las filas: ");
+                    Scanner inputFila = new Scanner(System.in);
+                    int[] filasReserva = new int[cantidad];
+
+                    for  (int i = 0; i < cantidad; i++) {
+                        int ingresoFila = inputFila.nextInt();
+                        filasReserva[i] = ingresoFila-1;
+                    }
+
+                    System.out.println("Ingrese las columnas: ");
+                    Scanner inputColumna = new Scanner(System.in);
+                    int [] columnasReserva = new int[cantidad];
+
+                    for ( int i = 0; i < cantidad; i++) {
+                        int ingresoColumna = inputColumna.nextInt();
+                        columnasReserva[i] = ingresoColumna-1;
+                    }
+
+                    reservarButaca(filasReserva,columnasReserva);
+                    System.out.println(mostrarMapa());
+                    System.out.println("El porcentaje de ocupación actual es: " + calcularPorcentajeOcupacion()+ "%");
+
+                } else if (cantidad==1) {
+                    System.out.println("Ingrese la fila: ");
+                    Scanner inputFila = new Scanner(System.in);
+                    int fila = inputFila.nextInt()-1;
+
+                    System.out.println("Ingrese la columna: ");
+                    Scanner inputColumna = new Scanner(System.in);
+                    int columna = inputColumna.nextInt()-1;
+
+                    reservarButaca(fila,columna);
+                    System.out.println(mostrarMapa());
+                    System.out.println("El porcentaje de ocupación actual es: " + calcularPorcentajeOcupacion() + "%");
+
+                } else if (cantidad==-1) {
+                    System.exit(0);
+                } else {
+                    System.err.println("Debe ingresar al menos una reserva..");
+                }
+
+            case 2:
+                System.exit(0);
+        }
+    }
+
+    public static void reservarButaca(int numeroFila, int numeroColumna) {
+        if (butacas[numeroFila][numeroColumna] == 'L') {
+            butacas[numeroFila][numeroColumna] = 'X';
+        }
+    }
+
+    public static void reservarButaca(int[] numeroFilas, int[] numeroColumnas) {
+        for  (int i = 0; i < numeroFilas.length; i++) {
+            if (butacas[(numeroFilas[i])][(numeroColumnas[i])] == 'L') {
+                butacas [(numeroFilas[i])][(numeroColumnas[i])] = 'X';
+            }
+        }
+
+    }
+
+
+    public static char[][] inicializarCine(int filas, int columnas) {
+        butacas = new char[filas][columnas];
 
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
@@ -107,33 +197,42 @@ public class Cine {
             }
         }
 
-        System.out.println("-----------MAPA DE BUTACAS-----------");
-        for (int i = 0; i < filas; i++) {
+        return butacas;
+    }
+
+    public static String mostrarMapa () {
+        String mapa="";
+        for (int i = 0; i < butacas.length; i++) {
             if (i==0) {
-                System.out.print("   ");
-                for (int k = 0; k < columnas; k++) {
-                    System.out.print((k+1) + " ");
+                mapa+="   ";
+                for (int k = 0; k < butacas[i].length; k++) {
+                    mapa+=(k+1) + " ";
                 }
             }
 
-            System.out.println(" ");
-            System.out.print((i+1) + "  ");
+            mapa+="\n"+(i+1) + "  ";
 
-            for (int j = 0; j < columnas; j++) {
-                System.out.print(butacas[i][j] + " ");
+            for (int j = 0; j < butacas[i].length; j++) {
+                mapa+=butacas[i][j] + " ";
+            }
+        }
+        return mapa;
+    }
+
+    public static double calcularPorcentajeOcupacion () {
+        int total=0;
+        int ocupados=0;
+
+        for  (int i = 0; i < butacas.length; i++) {
+            for  (int j = 0; j < butacas[i].length; j++) {
+                if (butacas[i][j]=='X') {
+                    ocupados++;
+                }
+                total++;
             }
         }
 
-        System.out.println(" ");
-
-
-
-        System.out.println("-----------MENU-----------");
-        System.out.println("1. Reservar una butaca");
-        System.out.println("2. Salir");
-        System.out.println("---------------------------------");
-        Scanner inputMenu = new Scanner(System.in);
-        System.out.println("Ingrese la opcion: ");
-        int opcion = inputMenu.nextInt();
+        double ocupacion =  ((double) ocupados/total)*100;
+        return ocupacion;
     }
 }
