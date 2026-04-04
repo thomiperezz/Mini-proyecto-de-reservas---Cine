@@ -2,7 +2,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Main {
-    static List<Cine> cines = new ArrayList<>();
     static List<Pelicula> peliculas = new ArrayList<>();
     static List<Reserva> todasLasReservas = new ArrayList<>();
     static Administrador admin=new Administrador("Admin", "Sistema", "admin@cine.com", "00000000", 1);
@@ -116,18 +115,36 @@ public class Main {
     }
 
     static void crearFuncion(Scanner s) {
-        if (cines.isEmpty() || peliculas.isEmpty()) { System.out.println("Necesitas cine y pelicula."); return; }
+        if (admin.getCines().isEmpty() || peliculas.isEmpty()) {
+            System.out.println("Necesitas cine y pelicula.");
+            return;
+        }
+
         System.out.println("\n=== CREAR FUNCION ===");
-        for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
+        for (int i = 0; i < admin.getCines().size(); i++) {
+            System.out.println((i + 1) + ". " + admin.getCines().get(i).getNombre());
+        }
+
         int cinIdx = obtenerEntero(s, "Cine: ") - 1;
-        Cine cine = cines.get(cinIdx);
-        if (cine.getSalas().isEmpty()) { System.out.println("Sin salas."); return; }
-        for (int i = 0; i < cine.getSalas().size(); i++) System.out.println((i + 1) + ". Sala " + cine.getSalas().get(i).getNumero());
+        Cine cine = admin.getCines().get(cinIdx);
+        if (cine.getSalas().isEmpty()) {
+            System.out.println("Sin salas.");
+            return;
+        }
+
+        for (int i = 0; i < cine.getSalas().size(); i++) {
+            System.out.println((i + 1) + ". Sala " + (cine.getSalas().get(i).getNumero()+1));
+        }
+
         int salaIdx = obtenerEntero(s, "Sala: ") - 1;
         Sala sala = cine.getSalas().get(salaIdx);
-        for (int i = 0; i < peliculas.size(); i++) System.out.println((i + 1) + ". " + peliculas.get(i).getNombre());
+        for (int i = 0; i < peliculas.size(); i++) {
+            System.out.println((i + 1) + ". " + peliculas.get(i).getNombre());
+        }
+
         int pelIdx = obtenerEntero(s, "Pelicula: ") - 1;
         Pelicula pel = peliculas.get(pelIdx);
+
         int anio = obtenerEntero(s, "Anio: ");
         int mes = obtenerEntero(s, "Mes: ");
         int dia = obtenerEntero(s, "Dia: ");
@@ -140,12 +157,14 @@ public class Main {
     }
 
     static void verMapaButacas(Scanner s) {
-        if (cines.isEmpty()) {
+        if (admin.getCines().isEmpty()) {
             System.out.println("Sin cines.");
             return;
         }
         System.out.println("\n=== VER MAPA ===");
-        for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
+        for (int i = 0; i < admin.getCines().size(); i++) {
+            System.out.println((i + 1) + ". " + admin.getCines().get(i).getNombre());
+        }
         int cinIdx = obtenerEntero(s, "Cine: ") - 1;
         Cine cine = admin.getCines().get(cinIdx);
         if (cine.getSalas().isEmpty()) {
@@ -163,17 +182,24 @@ public class Main {
     }
 
     static void hacerReserva(Scanner s) {
-        if (cines.isEmpty()) { System.out.println("Sin cines."); return; }
+        if (admin.getCines().isEmpty()) {
+            System.out.println("Sin cines.");
+            return;
+        }
+
         System.out.println("\n=== RESERVA ===");
         String nombre = obtenerTexto(s, "Nombre: ");
         String apellido = obtenerTexto(s, "Apellido: ");
         String email = obtenerTexto(s, "Email: ");
         String dni = obtenerTexto(s, "DNI: ");
+
         Cliente cliente = new Cliente(nombre, apellido, email, dni, "Regular");
-        System.out.println("\nFunciones:"); 
+        System.out.println("\nFunciones:");
+
         int cnt = 1; 
         List<Funcion> funcs = new ArrayList<>();
-        for (Cine cine : cines) {
+
+        for (Cine cine : admin.getCines()) {
             for (Sala sala : cine.getSalas()) {
                 for (Funcion f : sala.getFunciones()) {
                     System.out.println(cnt + ". " + f.getPelicula().getNombre() + " - " + f.getFecha());
@@ -182,7 +208,12 @@ public class Main {
                 }
             }
         }
-        if (funcs.isEmpty()) { System.out.println("Sin funciones."); return; }
+
+        if (funcs.isEmpty()) {
+            System.out.println("Sin funciones.");
+            return;
+        }
+
         int funcIdx = obtenerEntero(s, "Funcion: ") - 1;
         Funcion func = funcs.get(funcIdx);
         Sala sala = func.getSala();
@@ -270,12 +301,18 @@ public class Main {
                     }
                     break;
                 case 7:
-                    if (!cines.isEmpty()) {
-                        for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
+                    if (!admin.getCines().isEmpty()) {
+                        for (int i = 0; i < admin.getCines().size(); i++) {
+                            System.out.println((i + 1) + ". " + admin.getCines().get(i).getNombre());
+                        }
+
                         int idx = obtenerEntero(s, "Cine: ") - 1;
-                        Cine c = cines.get(idx);
+                        Cine c = admin.getCines().get(idx);
+
                         if (!c.getSalas().isEmpty()) {
-                            for (int i = 0; i < c.getSalas().size(); i++) System.out.println((i + 1) + ". Sala " + c.getSalas().get(i).getNumero());
+                            for (int i = 0; i < c.getSalas().size(); i++) {
+                                System.out.println((i + 1) + ". Sala " + (c.getSalas().get(i).getNumero())+1);
+                            }
                             int sIdx = obtenerEntero(s, "Sala: ") - 1;
                             admin.listarFunciones(idx, sIdx);
                         } else {
@@ -299,8 +336,10 @@ public class Main {
                     }
                     break;
                 case 9:
-                    if (!cines.isEmpty()) {
-                        for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
+                    if (!admin.getCines().isEmpty()) {
+                        for (int i = 0; i < admin.getCines().size(); i++) {
+                            System.out.println((i + 1) + ". " + admin.getCines().get(i).getNombre());
+                        }
                         int idx = obtenerEntero(s, "Cine: ") - 1;
                         admin.listarDetallesCine(idx);
                     }
