@@ -5,49 +5,73 @@ public class Main {
     static List<Cine> cines = new ArrayList<>();
     static List<Pelicula> peliculas = new ArrayList<>();
     static List<Reserva> todasLasReservas = new ArrayList<>();
-    static Administrador admin;
+    static Administrador admin=new Administrador("Admin", "Sistema", "admin@cine.com", "00000000", 1);
+    static Cliente cliente = new Cliente("Thomas","Perez","perezthomas17@hotmail.com","111111111","Sin plan");
     static Scanner scanner;
 
     public static void main(String[] args) {
+        System.out.println("Con qué usuario quiere ingresar al sistema?");
+        System.out.println("1. Usuario Administrador.");
+        System.out.println("2. Usuario Cliente.");
         scanner = new Scanner(System.in);
-        admin = new Administrador("Admin", "Sistema", "admin@cine.com", "00000000", 1);
-        admin.setCines(cines);
+        int opcion = obtenerOpcion(scanner);
+        switch (opcion) {
+            case 1:
+                consultarAdmin(scanner);
+                break;
+                case 2:
+                    mostrarMenuPrincipal(cliente);
+                    break;
+        }
 
-        int opcion = 0;
+    }
+
+    static void mostrarMenuPrincipal(Cliente cliente) {
+        System.out.println("\n===== MENU PRINCIPAL =====");
+        System.out.println("1. Ver Mapa de Butacas");
+        System.out.println("2. Hacer Reserva");
+        System.out.println("3. Salir");
+        scanner = new Scanner(System.in);
+
+        int opcion;
         while (true) {
-            mostrarMenuPrincipal();
+            mostrarMenuPrincipal(cliente);
+            System.out.println("Bienvenido al sistema " + cliente.getNombre()+ ", seleccione al acción que quiere realizar:  ");
             opcion = obtenerOpcion(scanner);
 
             switch (opcion) {
-                case 1: crearCine(scanner); break;
-                case 2: crearSala(scanner); break;
-                case 3: crearPelicula(scanner); break;
-                case 4: crearFuncion(scanner); break;
-                case 5: verMapaButacas(scanner); break;
-                case 6: hacerReserva(scanner); break;
-                case 7: consultarAdmin(scanner); break;
-                case 8: System.out.println("\nGracias!"); scanner.close(); return;
+                case 1:
+                    verMapaButacas(scanner);
+                    break;
+                case 2:
+                    hacerReserva(scanner);
+                    break;
+                case 3:
+                    System.out.println("\nGracias!");
+                    scanner.close();
+                    return;
             }
             System.out.println("\nPresiona Enter...");
             scanner.nextLine();
         }
+
+
     }
 
-    static void mostrarMenuPrincipal() {
-        System.out.println("\n===== MENU PRINCIPAL =====");
-        System.out.println("1. Crear Nuevo Cine");
-        System.out.println("2. Crear Nueva Sala");
-        System.out.println("3. Crear Nueva Pelicula");
-        System.out.println("4. Crear Nueva Funcion");
-        System.out.println("5. Ver Mapa de Butacas");
-        System.out.println("6. Hacer Reserva");
-        System.out.println("7. Consultar Admin");
-        System.out.println("8. Salir");
+    static int obtenerOpcion(Scanner s) {
+        System.out.print("Opcion: ");
+        return Integer.parseInt(s.nextLine());
     }
 
-    static int obtenerOpcion(Scanner s) { System.out.print("Opcion: "); return Integer.parseInt(s.nextLine()); }
-    static String obtenerTexto(Scanner s, String msg) { System.out.print(msg); return s.nextLine(); }
-    static int obtenerEntero(Scanner s, String msg) { System.out.print(msg); return Integer.parseInt(s.nextLine()); }
+    static String obtenerTexto(Scanner s, String msg) {
+        System.out.print(msg);
+        return s.nextLine();
+    }
+
+    static int obtenerEntero(Scanner s, String msg) {
+        System.out.print(msg);
+        return Integer.parseInt(s.nextLine());
+    }
 
     static void crearCine(Scanner s) {
         System.out.println("\n=== CREAR CINE ===");
@@ -58,18 +82,29 @@ public class Main {
     }
 
     static void crearSala(Scanner s) {
-        if (cines.isEmpty()) { System.out.println("Crea un cine primero."); return; }
+        if (admin.getCines().isEmpty()) {
+            System.err.println("Crea un cine primero.");
+            return;
+        }
+
+        List <Cine> cines = admin.getCines();
+
         System.out.println("\n=== CREAR SALA ===");
-        for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
-        int idx = obtenerEntero(s, "Cine: ") - 1;
-        Cine cine = cines.get(idx);
+        for (int i = 0; i < cines.size(); i++) {
+            System.out.println((i + 1) + ". " + cines.get(i).getNombre());
+        }
+
+        int inputCine = obtenerEntero(s, "Cine: ") - 1;
+        Cine cine = admin.getCines().get(inputCine);
+
         int filas = obtenerEntero(s, "Filas: ");
         int cols = obtenerEntero(s, "Columnas: ");
-        Sala sala = new Sala(new ArrayList<>());
-        sala.crearSala(filas, cols);
-        cine.getSalas().add(sala);
+        Sala sala = new Sala();
+        sala.rellenarSala(filas, cols);
+        cine.agregarSala(sala);
         System.out.println("Sala creada!");
     }
+
 
     static void crearPelicula(Scanner s) {
         System.out.println("\n=== CREAR PELICULA ===");
@@ -105,7 +140,10 @@ public class Main {
     }
 
     static void verMapaButacas(Scanner s) {
-        if (cines.isEmpty()) { System.out.println("Sin cines."); return; }
+        if (cines.isEmpty()) {
+            System.out.println("Sin cines.");
+            return;
+        }
         System.out.println("\n=== VER MAPA ===");
         for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
         int cinIdx = obtenerEntero(s, "Cine: ") - 1;
@@ -183,25 +221,50 @@ public class Main {
     }
 
     static void consultarAdmin(Scanner s) {
+
         boolean enMenu = true;
         while (enMenu) {
             System.out.println("\n=== MENU ADMIN ===");
-            System.out.println("1. Listar cines");
-            System.out.println("2. Listar salas");
-            System.out.println("3. Listar funciones");
-            System.out.println("4. Ver ocupacion");
-            System.out.println("5. Detalles cine");
-            System.out.println("6. Volver");
+            System.out.println("1. Crear Nuevo Cine");
+            System.out.println("2. Crear Nueva Sala");
+            System.out.println("3. Crear Nueva Pelicula");
+            System.out.println("4. Crear Nueva Funcion");
+            System.out.println("5. Listar cines");
+            System.out.println("6. Listar salas");
+            System.out.println("7. Listar funciones");
+            System.out.println("8. Ver ocupacion");
+            System.out.println("9. Detalles cine");
+            System.out.println("10. Volver");
             int op = obtenerEntero(s, "Opcion: ");
             switch (op) {
-                case 1: admin.listarCines(); break;
+                case 1:
+                    crearCine(scanner);
+                    break;
                 case 2:
-                    if (!cines.isEmpty()) {
-                        for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
+                    crearSala(scanner);
+                    break;
+                case 3:
+                    crearPelicula(scanner);
+                    break;
+                case 4:
+                    crearFuncion(scanner);
+                    break;
+                case 5:
+                    admin.listarCines();
+                    break;
+                case 6:
+                    if (!admin.getCines().isEmpty()) {
+                        for (int i = 0; i < admin.getCines().size(); i++) {
+                            Cine cine = admin.getCines().get(i);
+                            System.out.println((i + 1) + ". " + cine.getNombre());
+                        }
                         int idx = obtenerEntero(s, "Cine: ") - 1;
                         admin.listarSalas(idx);
-                    } break;
-                case 3:
+                    } else {
+                        System.err.println("\nNo se encontró ningun cine para listar las salas");
+                    }
+                    break;
+                case 7:
                     if (!cines.isEmpty()) {
                         for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
                         int idx = obtenerEntero(s, "Cine: ") - 1;
@@ -210,9 +273,13 @@ public class Main {
                             for (int i = 0; i < c.getSalas().size(); i++) System.out.println((i + 1) + ". Sala " + c.getSalas().get(i).getNumero());
                             int sIdx = obtenerEntero(s, "Sala: ") - 1;
                             admin.listarFunciones(idx, sIdx);
+                        } else {
+                            System.err.println("\nSala no encontrada\n");
                         }
-                    } break;
-                case 4:
+
+                    }
+                    break;
+                case 8:
                     if (!cines.isEmpty()) {
                         for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
                         int idx = obtenerEntero(s, "Cine: ") - 1;
@@ -222,14 +289,18 @@ public class Main {
                             int sIdx = obtenerEntero(s, "Sala: ") - 1;
                             admin.mostrarOcupacionSala(idx, sIdx);
                         }
-                    } break;
-                case 5:
+                    }
+                    break;
+                case 9:
                     if (!cines.isEmpty()) {
                         for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
                         int idx = obtenerEntero(s, "Cine: ") - 1;
                         admin.listarDetallesCine(idx);
-                    } break;
-                case 6: enMenu = false; break;
+                    }
+                    break;
+                case 10:
+                    enMenu = false;
+                    break;
             }
         }
     }

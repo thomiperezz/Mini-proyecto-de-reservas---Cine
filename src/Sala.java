@@ -10,9 +10,15 @@ public class Sala {
     private List<Funcion> funciones;
     private static int ultimoId;
 
+    public Sala() {
+        this.numero= ultimoId++;
+        this.butacas = new ArrayList<>();
+        this.funciones = new ArrayList<>();
+    }
+
     public Sala(List<Butaca> butacas) {
         this.numero = ultimoId++;
-        this.butacas = new  ArrayList<Butaca>();
+        this.butacas = butacas;
         this.funciones = new ArrayList<Funcion>();
     }
 
@@ -65,7 +71,7 @@ public class Sala {
         return ocupacion;
     }
 
-    public void crearSala (int filas, int columnas) {
+    public void rellenarSala (int filas, int columnas) {
         List<Butaca> butacas = new ArrayList<Butaca>();
 
         for (int i = 0; i < filas; i++){
@@ -78,11 +84,10 @@ public class Sala {
                 } else {
                     butacaCreada = new Platinum(i,j);
                 }
-                butacas.add(butacaCreada);
+                this.butacas.add(butacaCreada);
             }
         }
 
-        Sala salaNueva = new Sala(butacas);
     }
 
     public void reservarButaca(ArrayList<Integer> numeroFilas, ArrayList<Integer> numeroColumnas) {

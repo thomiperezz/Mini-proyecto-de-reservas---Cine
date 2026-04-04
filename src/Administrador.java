@@ -23,14 +23,10 @@ public class Administrador extends Persona {
         return cines;
     }
 
-    public void setCines(List<Cine> cines) {
-        this.cines = cines;
-    }
-
     public void listarCines() {
         System.out.println("\n=== CINES DISPONIBLES ===");
         if (cines.isEmpty()) {
-            System.out.println("No hay cines registrados.");
+            System.err.println("No hay cines registrados.");
             return;
         }
         for (int i = 0; i < cines.size(); i++) {
@@ -49,16 +45,16 @@ public class Administrador extends Persona {
         if (indiceCine < 0 || indiceCine >= cines.size()) {
             return;
         }
-        
+
         Cine cine = cines.get(indiceCine);
         System.out.println("\n=== SALAS DE: " + cine.getNombre() + " ===");
         if (cine.getSalas().isEmpty()) {
-            System.out.println("No hay salas en este cine.");
+            System.err.println("No hay salas en este cine.");
             return;
         }
         for (int i = 0; i < cine.getSalas().size(); i++) {
             Sala sala = cine.getSalas().get(i);
-            System.out.println((i + 1) + ". Sala " + sala.getNumero() + " - " + sala.getButacas().size() + " butacas");
+            System.out.println((i + 1) + ". Sala " + (sala.getNumero()+1) + " - " + sala.getButacas().size() + " butacas");
         }
     }
 
@@ -90,9 +86,6 @@ public class Administrador extends Persona {
         }
         
         Cine cine = cines.get(indiceCine);
-        if (indiceSala < 0 || indiceSala >= cine.getSalas().size()) {
-            return;
-        }
         
         Sala sala = cine.getSalas().get(indiceSala);
         System.out.println("\n=== OCUPACION - Sala " + sala.getNumero() + " ===");
