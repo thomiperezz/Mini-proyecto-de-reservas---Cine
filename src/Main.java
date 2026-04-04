@@ -147,9 +147,14 @@ public class Main {
         System.out.println("\n=== VER MAPA ===");
         for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
         int cinIdx = obtenerEntero(s, "Cine: ") - 1;
-        Cine cine = cines.get(cinIdx);
-        if (cine.getSalas().isEmpty()) { System.out.println("Sin salas."); return; }
-        for (int i = 0; i < cine.getSalas().size(); i++) System.out.println((i + 1) + ". Sala " + cine.getSalas().get(i).getNumero());
+        Cine cine = admin.getCines().get(cinIdx);
+        if (cine.getSalas().isEmpty()) {
+            System.out.println("Sin salas.");
+            return; }
+
+        for (int i = 0; i < cine.getSalas().size(); i++) {
+            System.out.println((i + 1) + ". Sala " + cine.getSalas().get(i).getNumero());
+        }
         int salaIdx = obtenerEntero(s, "Sala: ") - 1;
         Sala sala = cine.getSalas().get(salaIdx);
         System.out.println("\nMapa:"); System.out.println(sala.mostrarSala());
@@ -280,14 +285,16 @@ public class Main {
                     }
                     break;
                 case 8:
-                    if (!cines.isEmpty()) {
-                        for (int i = 0; i < cines.size(); i++) System.out.println((i + 1) + ". " + cines.get(i).getNombre());
+                    if (!admin.getCines().isEmpty()) {
+                        for (int i = 0; i < admin.getCines().size(); i++) {
+                            System.out.println((i + 1) + ". " + admin.getCines().get(i).getNombre());
+                        }
                         int idx = obtenerEntero(s, "Cine: ") - 1;
-                        Cine c = cines.get(idx);
+                        Cine c = admin.getCines().get(idx);
                         if (!c.getSalas().isEmpty()) {
-                            for (int i = 0; i < c.getSalas().size(); i++) System.out.println((i + 1) + ". Sala " + c.getSalas().get(i).getNumero());
+                            for (int i = 0; i < c.getSalas().size(); i++) System.out.println((i + 1) + ". Sala " + (c.getSalas().get(i).getNumero()+1));
                             int sIdx = obtenerEntero(s, "Sala: ") - 1;
-                            admin.mostrarOcupacionSala(idx, sIdx);
+                            System.out.println(c.getSalas().get(sIdx).calcularOcupacion()+"%");
                         }
                     }
                     break;
