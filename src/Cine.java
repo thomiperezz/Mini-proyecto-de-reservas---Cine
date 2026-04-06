@@ -8,7 +8,12 @@ public class Cine {
 
     public Cine(String nombre, List<Sala> salas) {
         this.nombre = nombre;
-        this.salas = salas;
+        this.salas = new  ArrayList<Sala>();
+    }
+
+    public Cine (String nombre) {
+        this.nombre = nombre;
+        this.salas=new ArrayList<>();
     }
 
     public String getNombre() {
@@ -29,6 +34,22 @@ public class Cine {
 
     public void eliminarSala(Sala sala) {
         this.salas.remove(sala);
+    }
+
+    public void listarSalas() {
+        if (this.salas.isEmpty()) {
+            return;
+        }
+
+        System.out.println("\n=== SALAS DE: " + this.nombre + " ===");
+        if (this.getSalas().isEmpty()) {
+            System.err.println("No hay salas en este cine.");
+            return;
+        }
+        for (int i = 0; i < this.salas.size(); i++) {
+            Sala sala = this.salas.get(i);
+            System.out.println((i + 1) + ". Sala " + (sala.getNumero()+1) + " - " + sala.getButacas().size() + " butacas");
+        }
     }
 
     @Override

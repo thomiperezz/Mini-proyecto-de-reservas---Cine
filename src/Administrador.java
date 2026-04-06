@@ -41,22 +41,7 @@ public class Administrador extends Persona {
         }
     }
 
-    public void listarSalas(int indiceCine) {
-        if (indiceCine < 0 || indiceCine >= cines.size()) {
-            return;
-        }
 
-        Cine cine = cines.get(indiceCine);
-        System.out.println("\n=== SALAS DE: " + cine.getNombre() + " ===");
-        if (cine.getSalas().isEmpty()) {
-            System.err.println("No hay salas en este cine.");
-            return;
-        }
-        for (int i = 0; i < cine.getSalas().size(); i++) {
-            Sala sala = cine.getSalas().get(i);
-            System.out.println((i + 1) + ". Sala " + (sala.getNumero()+1) + " - " + sala.getButacas().size() + " butacas");
-        }
-    }
 
     public void listarFunciones(int indiceCine, int indiceSala) {
         if (indiceCine < 0 || indiceCine >= cines.size()) {
@@ -120,5 +105,23 @@ public class Administrador extends Persona {
         System.out.println("Butacas ocupadas: " + totalOcupadas);
         double ocupacionGeneral = (totalButacas > 0 ? (totalOcupadas * 100.0 / totalButacas) : 0);
         System.out.printf("Ocupacion general: %.2f%%\n", ocupacionGeneral);
+    }
+
+    public void crearCine (String nombre, int cantidadSalas) {
+        Cine cine = new Cine(nombre);
+
+        for (int i = 0; i < cantidadSalas; i++) {
+            Sala sala = new Sala();
+            cine.agregarSala( sala );
+        }
+    }
+
+    public void agregarSalaCine (Cine cine, int filas, int columnas) {
+        for (Cine cineRecorrido : this.getCines()) {
+            if (cineRecorrido.getNombre().equals(cine.getNombre())) {
+                Sala sala = new Sala();
+                sala.rellenarSala(filas,columnas);
+            }
+        }
     }
 }
