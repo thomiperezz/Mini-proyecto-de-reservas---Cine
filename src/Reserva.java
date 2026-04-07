@@ -46,7 +46,7 @@ public class Reserva {
     }
 
     public void setTotal(double total) {
-        this.total = total;
+        this.total = this.calcularTotal();
     }
 
     public Cliente getCliente() {
@@ -75,9 +75,11 @@ public class Reserva {
 
     public double calcularTotal(){
         double total=0;
-        for (int i=0; i<this.listaDetalle.size();i++){
+        int cantidad=this.listaDetalle.size();
+
+        for (int i=0; i<cantidad; i++){
             DetalleReserva detalleReserva = this.listaDetalle.get(i);
-            total+=detalleReserva.calcularSubTotal();
+            total+=detalleReserva.calcularImporte();
         }
         return total;
     }

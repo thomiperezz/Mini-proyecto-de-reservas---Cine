@@ -1,11 +1,14 @@
 public abstract class Butaca implements Comparable<Butaca> {
     private int fila;
-    private int columna;
+    private int numero;
     private boolean ocupada=false;
+    private double precio;
 
-    public Butaca(int fila, int columna) {
+    public Butaca(int fila, int numero) {
         this.fila = fila;
-        this.columna = columna;
+        this.numero = numero;
+        this.precio = this.calcularPrecio();
+        this.ocupada=false;
     }
 
     public int getFila() {
@@ -13,7 +16,7 @@ public abstract class Butaca implements Comparable<Butaca> {
     }
 
     public int getColumna() {
-        return columna;
+        return numero;
     }
 
     public boolean isOcupada() {
@@ -24,19 +27,27 @@ public abstract class Butaca implements Comparable<Butaca> {
         this.ocupada = ocupada;
     }
 
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
     public abstract double calcularPrecio();
 
     @Override
     public String toString() {
-        return "Fila: " + this.fila + " Columna: " + this.columna + " Ocupada:" + this.ocupada;
+        return "Fila: " + this.fila + " Numero: " + this.numero + "Precio: " + this.precio + " Ocupada:" + this.ocupada;
     }
 
     @Override
     public int compareTo(Butaca otra) {
-        // Primero ordena por fila, luego por columna
+        // Primero ordena por fila, luego por numero de asiento
         if (this.fila != otra.fila) {
             return Integer.compare(this.fila, otra.fila);
         }
-        return Integer.compare(this.columna, otra.columna);
+        return Integer.compare(this.numero, otra.numero);
     }
 }

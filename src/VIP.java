@@ -1,10 +1,11 @@
 public class VIP extends Butaca{
     public VIP(int fila, int columna) {
-        super(fila, columna);
+        super (fila, columna);
     }
 
     public double calcularPrecio() {
-        double precio=100;
+        this.setPrecio(100);
+        double precio = this.getPrecio();
         return precio;
     }
 }

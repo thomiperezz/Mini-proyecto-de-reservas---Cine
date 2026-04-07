@@ -4,7 +4,8 @@ public class Gold extends Butaca{
     }
 
     public double calcularPrecio() {
-        double precio=50;
+        this.setPrecio(75);
+        double precio = this.getPrecio();
         return precio;
     }
 }

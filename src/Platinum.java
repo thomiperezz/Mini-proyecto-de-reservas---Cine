@@ -4,7 +4,8 @@ public class Platinum extends Butaca {
     }
 
     public double calcularPrecio() {
-        double precio=75;
+        this.setPrecio(50);
+        double precio = this.getPrecio();
         return precio;
     }
 }
