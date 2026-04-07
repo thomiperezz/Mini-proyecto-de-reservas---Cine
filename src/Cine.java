@@ -36,24 +36,18 @@ public class Cine {
         this.salas.remove(sala);
     }
 
-    public void listarSalas() {
-        if (this.salas.isEmpty()) {
-            return;
-        }
+    public String listarSalas() {
+        String detalleCines = "";
+        for (int i = 0; i < salas.size(); i++) {
+            Sala sala = salas.get(i);
 
-        System.out.println("\n=== SALAS DE: " + this.nombre + " ===");
-        if (this.getSalas().isEmpty()) {
-            System.err.println("No hay salas en este cine.");
-            return;
+            detalleCines+=sala.toString();
         }
-        for (int i = 0; i < this.salas.size(); i++) {
-            Sala sala = this.salas.get(i);
-            System.out.println((i + 1) + ". Sala " + (sala.getNumero()+1) + " - " + sala.getButacas().size() + " butacas");
-        }
+        return detalleCines;
     }
 
     @Override
     public String toString() {
-        return  "Cine: " + nombre + "\nSalas: " + salas.toString();
+        return  "\nCine: " + nombre + ", Salas: " + salas.toString()+"\n";
     }
 }
